@@ -9,7 +9,7 @@
 }
 
 .app-container {
-  @apply flex flex-col gap-4 w-full max-w-6xl items-center;
+  @apply flex flex-col gap-4 w-full max-w-6xl;
 }
 
 .app-title {
@@ -53,7 +53,7 @@
 }
 
 .columns-wrapper {
-  @apply w-full flex gap-8 overflow-x-auto pb-6 px-4;
+  @apply w-full flex gap-8 overflow-x-auto pb-6 px-4 justify-center;
 }
 
 .column-count {
@@ -67,7 +67,7 @@
 /* TASK CARD */
 
 .task-card {
-  @apply !flex-row items-center justify-between px-4 py-3 cursor-grab transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 bg-muted border;
+  @apply bg-zinc-800 border border-zinc-700 rounded-lg transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
 }
 
 .task-card:active {
@@ -78,7 +78,7 @@
   @apply text-sm font-medium;
 }
 
-.delete-btn {
+.delete-dialog {
   @apply text-muted-foreground hover:text-red-400 transition-colors duration-200 w-6 h-6 flex items-center justify-center rounded-md hover:bg-muted;
 }
 

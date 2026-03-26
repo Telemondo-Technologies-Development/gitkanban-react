@@ -18,7 +18,9 @@ interface ColumnProps {
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>, columnId: ColumnId) => void;
   onDragStart: (columnId: ColumnId, task: Task) => void;
-  onDelete: (columnId: ColumnId, taskId: number) => void;
+  onDelete: (columnId: ColumnId, task: Task) => void;
+  isLoading: boolean;
+  isSearching: boolean;
 }
 
 export default function Column({
@@ -31,9 +33,11 @@ export default function Column({
   onDrop,
   onDragStart,
   onDelete,
+  isLoading,
+  isSearching,
 }: ColumnProps) {
   return (
-    <Card className={`column-card ${borderStyle} p-0`} onDragOver={onDragOver} onDrop={(e) => onDrop(e, columnId)}>
+    <Card className={`column-card ${borderStyle} p-0 ${isLoading ? "opacity-50 pointer-events-none" : "" }`} onDragOver={onDragOver} onDrop={(e) => onDrop(e, columnId)}>
       <CardHeader className={`column-header ${headerStyle}`}>
         <span className="column-title">{name}</span>
         <span className="column-count">{items.length}</span>
@@ -41,10 +45,12 @@ export default function Column({
 
       <CardContent className="column-body !pt-0">
         {items.length === 0 ? (
-          <div className="empty-column">Drop tasks here.</div>
+          <div className="empty-column">
+            {isSearching ? "No matching tasks." : "Drop tasks here."}
+          </div>
         ) : (
           items.map((task) => (
-            <TaskCard key={task.id} task={task} columnId={columnId} onDragStart={onDragStart} onDelete={onDelete} />
+            <TaskCard key={task.id} task={task} columnId={columnId} onDragStart={onDragStart} onDelete={onDelete} isLoading={isLoading} />
           ))
         )}
       </CardContent>
