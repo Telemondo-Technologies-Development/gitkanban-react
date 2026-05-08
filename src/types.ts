@@ -4,7 +4,9 @@ export type ColumnId = "todo" | "inProgress" | "done";
 // represents a single task item
 export interface Task {
   id: number;           // GitHub issue number
+  nodeId: string;       // required for deletion via GraphQL
   content: string;      // GitHub issue title
+  description: string;  // GitHub issue description
 }
 
 // represents a column structure

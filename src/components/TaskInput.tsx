@@ -4,30 +4,50 @@
 - triggering task creation
 */
 
-import type { ColumnId, Columns } from "../types";
+import { useState } from "react";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog.tsx";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 // props expected by the TaskInput component
 interface TaskInputProps {
   newTask: string;
   setNewTask: (value: string) => void;
-  activeColumn: ColumnId;
-  setActiveColumn: (value: ColumnId) => void;
-  columns: Columns;
-  addNewTask: () => void;
+  addNewTask: (description: string) => Promise<boolean>;
+  isLoading: boolean;
 }
 
 export default function TaskInput({
   newTask,
   setNewTask,
   addNewTask,
+  isLoading,
 }: TaskInputProps) {
-  return (
-    <div className="task-input-wrapper">
-      {/* Input field for typing a new task */}
-      <input type="text" value={newTask} onChange={(e) => setNewTask(e.target.value)} placeholder="Add a new task..."className="task-input" onKeyDown={(e) => e.key === "Enter" && addNewTask()}/>
+  const [description, setDescription] = useState("");
+  const [open, setOpen] = useState(false);
 
-      {/* Button to trigger adding a new task */}
-      <button onClick={addNewTask} className="task-button">Add</button>
-    </div>
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="mb-6">+ New Task</Button>
+      </DialogTrigger>
+
+      <DialogContent className="bg-zinc-900 border border-zinc-700 text-zinc-100">
+        <DialogHeader>
+          <DialogTitle className="text-zinc-200">Create Task</DialogTitle>
+        </DialogHeader>
+
+        <Input placeholder="Task title" value={newTask} onChange={(e) => setNewTask(e.target.value)}/>
+
+        <Textarea placeholder="Task description" value={description} onChange={(e) => setDescription(e.target.value)}/>
+
+        <Button variant="ghost" className="w-full justify-center text-white hover:bg-white hover:text-black transition-colors" disabled={isLoading} onClick={async () => {const success = await addNewTask(description); if (success) {setDescription(""); setOpen(false);}}}>
+          
+          {isLoading ? "Creating..." : "Create"}
+          
+        </Button>  
+      </DialogContent>
+    </Dialog>
   );
 }
